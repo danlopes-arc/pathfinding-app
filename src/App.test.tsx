@@ -1,8 +1,9 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 import App from './App';
 
-test('renders learn react link', () => {
+it('renders a 4x4 board', () => {
   render(<App />);
-  expect(true).toBeTruthy();
+  const cells = screen.getAllByTestId('cell')
+  expect(cells).toHaveLength(16);
 });
