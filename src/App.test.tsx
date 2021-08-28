@@ -122,4 +122,21 @@ describe('end point', () => {
     const end = screen.queryByTestId('end')
     expect(end).not.toBeInTheDocument()
   })
+  
+  it('goes back to wall mode after adding a end point', () => {
+    render(<App />)
+
+    const addEndButton = screen.getByTestId('add-end-button')
+    fireEvent.click(addEndButton)
+    
+    const paths = screen.getAllByTestId('path')
+    const path0 = paths[0]
+    fireEvent.click(path0)
+
+    const path1 = paths[1]
+    fireEvent.click(path1)
+
+    const end = screen.getByTestId('end')
+    expect(end).toBe(path0)
+  })
 })
