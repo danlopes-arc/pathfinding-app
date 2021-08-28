@@ -55,7 +55,7 @@ function App() {
                   }
 
                   if (endCell === number) {
-                    setStartingCell(null)
+                    setEndCell(null)
                     return
                   }
 

@@ -139,4 +139,22 @@ describe('end point', () => {
     const end = screen.getByTestId('end')
     expect(end).toBe(path0)
   })
+  
+  it('switches end back to path when its clicked on', () => {
+    render(<App />)
+
+    const addEndButton = screen.getByTestId('add-end-button')
+    fireEvent.click(addEndButton)
+
+    const path = screen.getAllByTestId('path')[0]
+    fireEvent.click(path)
+    fireEvent.click(path)
+
+    const end = screen.queryByTestId('end')
+    expect(end).not.toBeInTheDocument()
+
+    const paths = screen.getAllByTestId('path')
+
+    expect(paths).toContain(path)
+  })
 })
