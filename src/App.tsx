@@ -31,6 +31,11 @@ function App() {
                     return
                   }
 
+                  if (startingCell === number) {
+                    setStartingCell(null)
+                    return
+                  }
+
                   if (walls.includes(number)) {
                     setWalls(walls.filter(w => w !== number))
                     return
