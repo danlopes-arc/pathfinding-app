@@ -17,3 +17,27 @@ it('can create wall on the board', () => {
   const wall = screen.getByTestId('wall')
   expect(wall).toBeInTheDocument()
 })
+
+it('can revert a wall to a path', () => {
+  render(<App />)
+  
+  const cell = screen.getAllByTestId('cell')[0]
+  fireEvent.click(cell)
+  fireEvent.click(cell)
+
+  const wall = screen.queryByTestId('wall')
+  expect(wall).not.toBeInTheDocument()
+})
+
+it('can add a starting point on the board', () => {
+  render(<App />)
+
+  const addStartButton = screen.getByTestId('add-start-button')
+  fireEvent.click(addStartButton)
+  
+  const cell = screen.getAllByTestId('cell')[0]
+  fireEvent.click(cell)
+
+  const start = screen.getByTestId('start')
+  expect(start).toBeInTheDocument()
+})
