@@ -107,4 +107,19 @@ describe('end point', () => {
     const end = screen.getByTestId('end')
     expect(end).toBeInTheDocument()
   })
+
+  it('cannot add an end point on a wall', () => {
+    render(<App />)
+
+    const cell = screen.getAllByTestId('cell')[0]
+    fireEvent.click(cell)
+
+    const addEndButton = screen.getByTestId('add-end-button')
+    fireEvent.click(addEndButton)
+
+    fireEvent.click(cell)
+
+    const end = screen.queryByTestId('end')
+    expect(end).not.toBeInTheDocument()
+  })
 })
