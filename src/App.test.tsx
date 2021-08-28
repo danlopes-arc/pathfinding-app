@@ -42,7 +42,20 @@ it('can add a starting point on the board', () => {
   expect(start).toBeInTheDocument()
 })
 
-it.todo('cannot add a staritng point on a wall')
+it('cannot add a staritng point on a wall', () => {
+  render(<App />)
+
+  const cell = screen.getAllByTestId('cell')[0]
+  fireEvent.click(cell)
+
+  const addStartButton = screen.getByTestId('add-start-button')
+  fireEvent.click(addStartButton)
+
+  fireEvent.click(cell)
+
+  const start = screen.queryByTestId('start')
+  expect(start).not.toBeInTheDocument()
+})
 
 it('goes back to wall mode after adding a starting point', () => {
   render(<App />)
@@ -60,3 +73,5 @@ it('goes back to wall mode after adding a starting point', () => {
   const start = screen.getByTestId('start')
   expect(start).toBe(path0)
 })
+
+it.todo('switches start back to path when its clicked on')
