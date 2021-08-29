@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Cell, CellType } from './components/Cell';
 
 type GameMode = 'idle' | 'start' | 'end'
 
@@ -10,10 +11,59 @@ function App() {
 
   const board = [...Array(4)].map((_, i) => [...Array(4)].map((_, j) => i * 4 + j))
 
-  const wallClasses = 'bg-gray-700 hover:bg-gray-800 text-gray-300'
-  const pathClasses = 'hover:bg-gray-200'
-  const startClasses = 'bg-green-500 hover:bg-green-700 hover:text-gray-200'
-  const endClasses = 'bg-blue-500 hover:bg-blue-700 hover:text-gray-200'
+  const getType = (row: number, col: number): CellType => {
+    const index = row * 4 + col
+    if (walls.includes(index)) {
+      return 'wall'
+    }
+    if (startingCell === index) {
+      return 'start'
+    }
+    if (endCell === index) {
+      return 'end'
+    }
+    return 'path'
+  }
+
+  const onCellClick = (number: number) => () => {
+
+    if (mode === 'start') {
+      if (walls.includes(number)) {
+        setMode('idle')
+        return
+      }
+      setStartingCell(number)
+      setMode('idle')
+      return
+    }
+
+    if (mode === 'end') {
+      if (walls.includes(number)) {
+        setMode('idle')
+        return
+      }
+      setEndCell(number)
+      setMode('idle')
+      return
+    }
+
+    if (startingCell === number) {
+      setStartingCell(null)
+      return
+    }
+
+    if (endCell === number) {
+      setEndCell(null)
+      return
+    }
+
+    if (walls.includes(number)) {
+      setWalls(walls.filter(w => w !== number))
+      return
+    }
+
+    setWalls([...walls, number])
+  }
 
   return (
     <div className='h-screen w-screen flex flex-col justify-center items-center'>
@@ -21,56 +71,9 @@ function App() {
         {board.map((cells, i) => (
           <div className='flex gap-1' key={i}>
             {cells.map((number, j) => (
-              <div
-                data-testid='cell'
-                key={j}
-                className={'border border-black cursor-pointer w-10 h-10 pl-1 ' + 
-                  (walls.includes(number) ? wallClasses :
-                    (startingCell === number ? startClasses :
-                      (endCell === number ? endClasses : pathClasses)))}
-                onClick={() => {
-                  if (mode === 'start') {
-                    if (walls.includes(number)) {
-                      setMode('idle')
-                      return
-                    }
-                    setStartingCell(number)
-                    setMode('idle')
-                    return
-                  }
-
-                  if (mode === 'end') {
-                    if (walls.includes(number)) {
-                      setMode('idle')
-                      return
-                    }
-                    setEndCell(number)
-                    setMode('idle')
-                    return
-                  }
-
-                  if (startingCell === number) {
-                    setStartingCell(null)
-                    return
-                  }
-
-                  if (endCell === number) {
-                    setEndCell(null)
-                    return
-                  }
-
-                  if (walls.includes(number)) {
-                    setWalls(walls.filter(w => w !== number))
-                    return
-                  }
-
-                  setWalls([...walls, number])
-                }}
-              >
-                <div data-testid={walls.includes(number) ? 'wall' : (startingCell === number ? 'start' : (endCell === number ? 'end' : 'path'))}>
-                  {number}
-                </div>
-              </div>
+              <Cell type={getType(i, j)} onClick={onCellClick(number)}>
+                {number}
+              </Cell>
             ))}
           </div>
         ))}
