@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Cell, CellType } from './components/Cell';
+import { solvePath } from './utils/solvePath'
 
 type GameMode = 'idle' | 'start' | 'end'
+
+const BOARD_SIDE_SIZE = 4
+const BOARD_CELL_SIZE = 4
 
 function App() {
   const [walls, setWalls] = useState<number[]>([])
   const [mode, setMode] = useState<GameMode>('idle')
   const [startingCell, setStartingCell] = useState<number | null>(null)
   const [endCell, setEndCell] = useState<number | null>(null)
+  const [path, setPath] = useState<number[]>([])
 
-  const board = [...Array(4)].map((_, i) => [...Array(4)].map((_, j) => i * 4 + j))
+  const board = [...Array(BOARD_SIDE_SIZE)].map((_, i) => [...Array(BOARD_SIDE_SIZE)].map((_, j) => i * BOARD_SIDE_SIZE + j))
 
   const getType = (row: number, col: number): CellType => {
-    const index = row * 4 + col
+    const index = row * BOARD_SIDE_SIZE + col
     if (walls.includes(index)) {
       return 'wall'
+    }
+    if (path.includes(index)) {
+      return 'path'
     }
     if (startingCell === index) {
       return 'start'
@@ -65,13 +73,53 @@ function App() {
     setWalls([...walls, number])
   }
 
+  useEffect(() => {
+    if (startingCell == null || endCell == null) {
+      setPath([])
+      return
+    }
+
+    const relativeCosts = [...Array(BOARD_CELL_SIZE)].map((_, fromCell) => [...Array(BOARD_CELL_SIZE)].map((_, toCell) => {
+      const fromCellRow = Math.trunc(fromCell / BOARD_SIDE_SIZE)
+      const fromCellCol = fromCell % BOARD_SIDE_SIZE
+
+      const toCellRow = Math.trunc(toCell / BOARD_SIDE_SIZE)
+      const toCellCol = toCell % BOARD_SIDE_SIZE
+
+      if (walls.includes(fromCell) || walls.includes(toCell)) {
+        return Infinity
+      }
+
+      if (fromCellRow - 1 === toCellRow) {
+        return 1
+      }
+
+      if (fromCellRow + 1 === toCellRow) {
+        return 1
+      }
+
+      if (fromCellCol - 1 === toCellCol) {
+        return 1
+      }
+
+      if (fromCellCol + 1 === toCellCol) {
+        return 1
+      }
+      return Infinity
+    }))
+
+    const solvedPath = solvePath(relativeCosts, startingCell, endCell)
+    
+    setPath(solvedPath ?? [])
+  }, [walls, startingCell, endCell])
+
   return (
     <div className='h-screen w-screen flex flex-col justify-center items-center'>
       <div className='flex flex-col gap-1'>
         {board.map((cells, i) => (
           <div className='flex gap-1' key={i}>
             {cells.map((number, j) => (
-              <Cell type={getType(i, j)} onClick={onCellClick(number)}>
+              <Cell type={getType(i, j)} onClick={onCellClick(number)} key={number}>
                 {number}
               </Cell>
             ))}

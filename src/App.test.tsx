@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import React from 'react';
 import App from './App';
 
@@ -159,34 +159,27 @@ describe('end point', () => {
   })
 })
 
-// describe.skip('auto sovle', () => {
-//   it('show solved path after start and end points are palce on the board', () => {
-//     render(<App />)
+describe('auto sovle', () => {
+  it('show solved path after start and end points are palce on the board', () => {
+    render(<App />)
 
-//     const cells = screen.getAllByTestId('cell')
-//     const startCell = cells[0]
-//     const endCell = cells[3]
+    const cells = screen.getAllByTestId('cell')
+    const startCell = cells[0]
+    const endCell = cells[3]
 
-//     const passages = [0,1,2,3].map(cellIndex => cells[cellIndex])
+    const expectedPaths = [0,1,2,3].map(cellIndex => within(cells[cellIndex]).getByTestId('passage'))
 
-//     const addStartButton = screen.getByTestId('add-start-button')
-//     fireEvent.click(addStartButton)
-//     fireEvent.click(startCell)
+    const addStartButton = screen.getByTestId('add-start-button')
+    fireEvent.click(addStartButton)
+    fireEvent.click(startCell)
 
-//     const addEndButton = screen.getByTestId('add-end-button')
-//     fireEvent.click(addEndButton)
-//     fireEvent.click(endCell)
+    const addEndButton = screen.getByTestId('add-end-button')
+    fireEvent.click(addEndButton)
+    fireEvent.click(endCell)
 
-//     const passage = screen.getAllByTestId('passage')[0]
-//     fireEvent.click(passage)
-//     fireEvent.click(passage)
+    const actualPaths = screen.getAllByTestId('path')
 
-//     const end = screen.queryByTestId('end')
-//     expect(end).not.toBeInTheDocument()
+    expect(expectedPaths).toEqual(actualPaths)
 
-//     const passages = screen.getAllByTestId('passage')
-
-//     expect(passages).toContain(passage)
-
-//   })
-// })
+  })
+})
