@@ -18,7 +18,7 @@ it('can create wall on the board', () => {
   expect(wall).toBeInTheDocument()
 })
 
-it('can revert a wall to a path', () => {
+it('can revert a wall to a passage', () => {
   render(<App />)
   
   const cell = screen.getAllByTestId('cell')[0]
@@ -64,33 +64,33 @@ describe('starting point', () => {
     const addStartButton = screen.getByTestId('add-start-button')
     fireEvent.click(addStartButton)
     
-    const paths = screen.getAllByTestId('path')
-    const path0 = paths[0]
-    fireEvent.click(path0)
+    const passages = screen.getAllByTestId('passage')
+    const passage0 = passages[0]
+    fireEvent.click(passage0)
 
-    const path1 = paths[1]
-    fireEvent.click(path1)
+    const passage1 = passages[1]
+    fireEvent.click(passage1)
 
     const start = screen.getByTestId('start')
-    expect(start).toBe(path0)
+    expect(start).toBe(passage0)
   })
 
-  it('switches start back to path when its clicked on', () => {
+  it('switches start back to passage when its clicked on', () => {
     render(<App />)
 
     const addStartButton = screen.getByTestId('add-start-button')
     fireEvent.click(addStartButton)
 
-    const path = screen.getAllByTestId('path')[0]
-    fireEvent.click(path)
-    fireEvent.click(path)
+    const passage = screen.getAllByTestId('passage')[0]
+    fireEvent.click(passage)
+    fireEvent.click(passage)
 
     const start = screen.queryByTestId('start')
     expect(start).not.toBeInTheDocument()
 
-    const paths = screen.getAllByTestId('path')
+    const passages = screen.getAllByTestId('passage')
 
-    expect(paths).toContain(path)
+    expect(passages).toContain(passage)
   })
 })
 
@@ -129,32 +129,64 @@ describe('end point', () => {
     const addEndButton = screen.getByTestId('add-end-button')
     fireEvent.click(addEndButton)
     
-    const paths = screen.getAllByTestId('path')
-    const path0 = paths[0]
-    fireEvent.click(path0)
+    const passages = screen.getAllByTestId('passage')
+    const passage0 = passages[0]
+    fireEvent.click(passage0)
 
-    const path1 = paths[1]
-    fireEvent.click(path1)
+    const passage1 = passages[1]
+    fireEvent.click(passage1)
 
     const end = screen.getByTestId('end')
-    expect(end).toBe(path0)
+    expect(end).toBe(passage0)
   })
   
-  it('switches end back to path when its clicked on', () => {
+  it('switches end back to passage when its clicked on', () => {
     render(<App />)
 
     const addEndButton = screen.getByTestId('add-end-button')
     fireEvent.click(addEndButton)
 
-    const path = screen.getAllByTestId('path')[0]
-    fireEvent.click(path)
-    fireEvent.click(path)
+    const passage = screen.getAllByTestId('passage')[0]
+    fireEvent.click(passage)
+    fireEvent.click(passage)
 
     const end = screen.queryByTestId('end')
     expect(end).not.toBeInTheDocument()
 
-    const paths = screen.getAllByTestId('path')
+    const passages = screen.getAllByTestId('passage')
 
-    expect(paths).toContain(path)
+    expect(passages).toContain(passage)
   })
 })
+
+// describe.skip('auto sovle', () => {
+//   it('show solved path after start and end points are palce on the board', () => {
+//     render(<App />)
+
+//     const cells = screen.getAllByTestId('cell')
+//     const startCell = cells[0]
+//     const endCell = cells[3]
+
+//     const passages = [0,1,2,3].map(cellIndex => cells[cellIndex])
+
+//     const addStartButton = screen.getByTestId('add-start-button')
+//     fireEvent.click(addStartButton)
+//     fireEvent.click(startCell)
+
+//     const addEndButton = screen.getByTestId('add-end-button')
+//     fireEvent.click(addEndButton)
+//     fireEvent.click(endCell)
+
+//     const passage = screen.getAllByTestId('passage')[0]
+//     fireEvent.click(passage)
+//     fireEvent.click(passage)
+
+//     const end = screen.queryByTestId('end')
+//     expect(end).not.toBeInTheDocument()
+
+//     const passages = screen.getAllByTestId('passage')
+
+//     expect(passages).toContain(passage)
+
+//   })
+// })

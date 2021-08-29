@@ -1,9 +1,9 @@
 import React from 'react'
 
-export type CellType = 'path' | 'wall' | 'start' | 'end'
+export type CellType = 'passage' | 'wall' | 'start' | 'end'
 
 const cellTypeClasses: {[key in CellType]: string} = {
-  path: 'hover:bg-gray-200',
+  passage: 'hover:bg-gray-200',
   wall: 'bg-gray-700 hover:bg-gray-800 text-gray-300',
   start: 'bg-green-500 hover:bg-green-700 hover:text-gray-200',
   end: 'bg-blue-500 hover:bg-blue-700 hover:text-gray-200',

@@ -22,7 +22,7 @@ function App() {
     if (endCell === index) {
       return 'end'
     }
-    return 'path'
+    return 'passage'
   }
 
   const onCellClick = (number: number) => () => {
