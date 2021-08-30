@@ -160,14 +160,28 @@ describe('end point', () => {
 })
 
 describe('auto sovle', () => {
-  it('show solved path after start and end points are palce on the board', () => {
+  // TODO: add cases
+  // TODO: instead of looking for x path blocks, look for x - 2 + start-path + end-path
+  it.each([
+    {
+      startCellIndex: 0,
+      endCellIndex: 3,
+      expectedPathIndexes: [0,1,2,3]
+    },
+    
+    {
+      startCellIndex: 4,
+      endCellIndex: 7,
+      expectedPathIndexes: [4,5,6,7],
+    }
+  ])('show solved path after start and end points are palce on the board', ({startCellIndex, endCellIndex, expectedPathIndexes}) => {
     render(<App />)
 
     const cells = screen.getAllByTestId('cell')
-    const startCell = cells[0]
-    const endCell = cells[3]
+    const startCell = cells[startCellIndex]
+    const endCell = cells[endCellIndex]
 
-    const expectedPaths = [0,1,2,3].map(cellIndex => within(cells[cellIndex]).getByTestId('passage'))
+    const expectedPaths = expectedPathIndexes.map(cellIndex => within(cells[cellIndex]).getByTestId('passage'))
 
     const addStartButton = screen.getByTestId('add-start-button')
     fireEvent.click(addStartButton)
@@ -182,4 +196,8 @@ describe('auto sovle', () => {
     expect(expectedPaths).toEqual(actualPaths)
 
   })
+
+  it.todo('should reset board when a button is pressed')
+  it.todo('should be able to resize board')
+
 })

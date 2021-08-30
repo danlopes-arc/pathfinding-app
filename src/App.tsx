@@ -5,7 +5,7 @@ import { solvePath } from './utils/solvePath'
 type GameMode = 'idle' | 'start' | 'end'
 
 const BOARD_SIDE_SIZE = 4
-const BOARD_CELL_SIZE = 4
+const BOARD_CELL_SIZE = BOARD_SIDE_SIZE * BOARD_SIDE_SIZE
 
 function App() {
   const [walls, setWalls] = useState<number[]>([])
@@ -85,26 +85,31 @@ function App() {
 
       const toCellRow = Math.trunc(toCell / BOARD_SIDE_SIZE)
       const toCellCol = toCell % BOARD_SIDE_SIZE
-
+      
       if (walls.includes(fromCell) || walls.includes(toCell)) {
         return Infinity
       }
 
-      if (fromCellRow - 1 === toCellRow) {
+      // top
+      if (fromCellRow - 1 === toCellRow && fromCellCol === toCellCol) {
         return 1
       }
 
-      if (fromCellRow + 1 === toCellRow) {
+      // bottom
+      if (fromCellRow + 1 === toCellRow && fromCellCol === toCellCol) {
         return 1
       }
 
-      if (fromCellCol - 1 === toCellCol) {
+      // left
+      if (fromCellRow  === toCellRow && fromCellCol - 1 === toCellCol) {
         return 1
       }
 
-      if (fromCellCol + 1 === toCellCol) {
+      // right
+      if (fromCellRow  === toCellRow && fromCellCol + 1 === toCellCol) {
         return 1
       }
+
       return Infinity
     }))
 
