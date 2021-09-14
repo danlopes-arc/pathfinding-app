@@ -8,6 +8,12 @@ it('renders a 4x4 board', () => {
   expect(cells).toHaveLength(16);
 });
 
+it('renders an empty board', () => {
+  render(<App />);
+  const passages = screen.getAllByTestId('passage')
+  expect(passages).toHaveLength(16);
+});
+
 it('can create wall on the board', () => {
   render(<App />)
   
@@ -197,7 +203,10 @@ describe('auto sovle', () => {
 
   })
 
-  it.todo('should reset board when a button is pressed')
+  it('should reset board when a button is pressed', () => {
+    render(<App />)
+
+  })
   it.todo('should be able to resize board')
 
 })
